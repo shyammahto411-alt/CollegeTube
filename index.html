@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollegeTube - Share Your Knowledge</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 30px;
+            padding: 8px 15px;
+            width: 40%;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 5px;
+            outline: none;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #c0392b;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 60px 5%;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .category {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .category:hover, .category.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .video-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .thumbnail {
+            height: 180px;
+            background-color: #ddd;
+            position: relative;
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .video-info {
+            padding: 15px;
+        }
+        
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .upload-section h2 {
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 5%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar {
+                width: 100%;
+                order: 3;
+                margin-top: 15px;
+            }
+            
+            header {
+                flex-wrap: wrap;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>CollegeTube</span>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Search for lectures, projects, vlogs...">
+            <i class="fas fa-search"></i>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Trending</a></li>
+                <li><a href="#">Subscriptions</a></li>
+            </ul>
+        </nav>
+        
+        <div class="user-actions">
+            <button class="btn btn-primary" onclick="showUploadForm()">Upload</button>
+            <button class="btn btn-secondary">Sign In</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h1>Share Your Knowledge & Creativity</h1>
+            <p>A platform for college students and teachers to share lectures, projects, vlogs, and more!</p>
+            <button class="btn btn-secondary">Get Started</button>
+        </section>
+        
+        <div class="categories">
+            <div class="category active">All</div>
+            <div class="category">Lectures</div>
+            <div class="category">Projects</div>
+            <div class="category">Vlogs</div>
+            <div class="category">Tutorials</div>
+            <div class="category">Business</div>
+            <div class="category">Programming</div>
+            <div class="category">Design</div>
+        </div>
+        
+        <h2>Trending Videos</h2>
+        <div class="video-grid">
+            <!-- Video cards will be generated here -->
+        </div>
+        
+        <section class="upload-section" id="uploadForm" style="display: none;">
+            <h2>Upload Your Video</h2>
+            <form id="videoUploadForm">
+                <div class="form-group">
+                    <label for="videoTitle">Video Title</label>
+                    <input type="text" id="videoTitle" placeholder="Enter a title for your video" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoDescription">Description</label>
+                    <textarea id="videoDescription" placeholder="Describe your video" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoCategory">Category</label>
+                    <select id="videoCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="lecture">Lecture</option>
+                        <option value="project">Project</option>
+                        <option value="vlog">Vlog</option>
+                        <option value="tutorial">Tutorial</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoFile">Select Video File</label>
+                    <input type="file" id="videoFile" accept="video/*" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Upload Video</button>
+            </form>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CollegeTube</span>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+            </div>
+            
+            <p>&copy; 2025 CollegeTube. Designed for educational purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample video data
+        const videos = [
+            {
+                title: "Introduction to Web Development - Full Lecture",
+                views: "15K",
+                date: "2 weeks ago",
+                duration: "45:22",
+                thumbnail: "https://placehold.co/300x180/3498db/white?text=Web+Development",
+                category: "lecture"
+            },
+            {
+                title: "How I Built My First Business in College",
+                views: "28K",
+                date: "3 days ago",
+                duration: "18:45",
+                thumbnail: "https://placehold.co/300x180/e74c3c/white?text=Business",
+                category: "business"
+            },
+            {
+                title: "Campus Tour - My College Life Vlog",
+                views: "42K",
+                date: "1 week ago",
+                duration: "12:30",
+                thumbnail: "https://placehold.co/300x180/2ecc71/white?text=Campus+Vlog",
+                category: "vlog"
+            },
+            {
+                title: "Python Tutorial for Beginners",
+                views: "35K",
+                date: "5 days ago",
+                duration: "32:15",
+                thumbnail: "https://placehold.co/300x180/2980b9/white?text=Python+Tutorial",
+                category: "tutorial"
+            },
+            {
+                title: "Final Year Project Demonstration",
+                views: "10K",
+                date: "4 days ago",
+                duration: "22:18",
+                thumbnail: "https://placehold.co/300x180/8e44ad/white?text=Project+Demo",
+                category: "project"
+            },
+            {
+                title: "Data Structures and Algorithms Lecture",
+                views: "19K",
+                date: "2 weeks ago",
+                duration: "48:07",
+                thumbnail: "https://placehold.co/300x180/34495e/white?text=Algorithms",
+                category: "lecture"
+            }
+        ];
+
+        // Generate video cards
+        const videoGrid = document.querySelector('.video-grid');
+        
+        videos.forEach(video => {
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            videoCard.innerHTML = `
+                <div class="thumbnail">
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <div class="duration">${video.duration}</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">${video.title}</div>
+                    <div class="video-meta">
+                        <span>${video.views} views</span>
+                        <span>${video.date}</span>
+                    </div>
+                </div>
+            `;
+            videoGrid.appendChild(videoCard);
+        });
+
+        // Show upload form
+        function showUploadForm() {
+            document.getElementById('uploadForm').style.display = 'block';
+            window.scrollTo({
+                top: document.getElementById('uploadForm').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('videoUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Video uploaded successfully! In a real application, this would be sent to a server.');
+            this.reset();
+        });
+
+        // Category filtering
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(category => {
+            category.addEventListener('click', function() {
+                categories.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                // In a real app, this would filter the videos
+                alert(`Filtering by: ${this.textContent}`);
+            });
+        });
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
